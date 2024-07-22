@@ -1,3 +1,4 @@
+import 'package:cadeau_app/screens/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -24,12 +25,80 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget getLabelType(String str) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text(
-        str,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: Colors.grey,
+      child: Text(str,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Color.fromARGB(255, 125, 125, 125),
+          )),
+    );
+  }
+
+  Widget getPhoneNumberWidget() {
+    return InternationalPhoneNumberInput(
+      onInputChanged: (PhoneNumber number) {
+        print(number.phoneNumber);
+      },
+      inputDecoration: InputDecoration(
+        hintText: '123-456-7890',
+        hintStyle: GoogleFonts.jost(
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.w400, // Semi-bold text
+            color: Color.fromARGB(255, 196, 195, 195), // Grey color for hint
+          ),
+        ),
+      ),
+      textStyle: GoogleFonts.jost(
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.w500, // Semi-bold text
+          color: Colors.black, // Grey color for hint
+        ),
+      ),
+      textFieldController: _phoneController,
+      selectorConfig: const SelectorConfig(
+        selectorType: PhoneInputSelectorType.DROPDOWN,
+      ),
+    );
+  }
+
+  Widget getCyanButton(String str) {
+    return SizedBox(
+      width: 370, // Full width
+      height: 60,
+      child: FilledButton(
+        onPressed: isButtonEnabled
+            ? () {
+                // Handle button press
+                print('Button Pressed');
+              }
+            : null,
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.disabled)) {
+                return const Color.fromARGB(
+                    216, 204, 204, 204); // Disabled color
+              }
+              return const Color.fromARGB(255, 63, 170, 174); // Enabled color
+            },
+          ),
+          textStyle: WidgetStateProperty.all<TextStyle>(
+            GoogleFonts.jost(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+              ),
+            ),
+          ),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+        ),
+        child: Text(
+          str,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -87,31 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 20,
             ),
             getLabelType('Phone Number'),
-            InternationalPhoneNumberInput(
-              onInputChanged: (PhoneNumber number) {
-                print(number.phoneNumber);
-              },
-              inputDecoration: InputDecoration(
-                hintText: '123-456-7890',
-                hintStyle: GoogleFonts.jost(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w400, // Semi-bold text
-                    color: Color.fromARGB(
-                        255, 196, 195, 195), // Grey color for hint
-                  ),
-                ),
-              ),
-              textStyle: GoogleFonts.jost(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.w500, // Semi-bold text
-                  color: Colors.black, // Grey color for hint
-                ),
-              ),
-              textFieldController: _phoneController,
-              selectorConfig: const SelectorConfig(
-                selectorType: PhoneInputSelectorType.DROPDOWN,
-              ),
-            ),
+            getPhoneNumberWidget(),
             const SizedBox(height: 8.0),
             getLabelType('Password'),
             TextFormField(
@@ -140,54 +185,21 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              width: 370, // Full width
-              height: 60,
-              child: FilledButton(
-                onPressed: isButtonEnabled
-                    ? () {
-                        // Handle button press
-                        print('Button Pressed');
-                      }
-                    : null,
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                    (Set<WidgetState> states) {
-                      if (states.contains(WidgetState.disabled)) {
-                        return Colors.grey; // Disabled color
-                      }
-                      return const Color.fromARGB(
-                          255, 63, 170, 174); // Enabled color
-                    },
-                  ),
-                  textStyle: WidgetStateProperty.all<TextStyle>(
-                    GoogleFonts.jost(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                ),
-                child: const Text(
-                  'Log in',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
+            getCyanButton('Log in'),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ForgetPasswordScreen()),
+                    );
+                  },
                   child: Text(
                     'Forget password?',
                     style: GoogleFonts.jost(
-                        color: Color.fromARGB(255, 90, 88, 88),
+                        color: const Color.fromARGB(255, 90, 88, 88),
                         fontSize: 15,
                         fontWeight: FontWeight.w700),
                   )),
