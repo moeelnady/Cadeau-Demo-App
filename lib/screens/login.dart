@@ -1,4 +1,7 @@
+import 'package:cadeau_app/controllers/login_controller.dart';
 import 'package:cadeau_app/screens/forget_password.dart';
+import 'package:cadeau_app/screens/main_screen.dart';
+import 'package:cadeau_app/services/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -38,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return InternationalPhoneNumberInput(
       onInputChanged: (PhoneNumber number) {
         print(number.phoneNumber);
+        print(number.dialCode);
       },
       inputDecoration: InputDecoration(
         hintText: '123-456-7890',
@@ -67,9 +71,20 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 60,
       child: FilledButton(
         onPressed: isButtonEnabled
-            ? () {
-                // Handle button press
-                print('Button Pressed');
+            ? () async {
+                bool isLogin = await LoginController().login(_phoneController.text, _passwordController.text);
+                print("is Login : $isLogin");
+                if(isLogin){
+                  if(!mounted) {
+                    return;
+                  }
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainScreen()),
+                        (route) => false,
+                  );
+                }
+
               }
             : null,
         style: ButtonStyle(

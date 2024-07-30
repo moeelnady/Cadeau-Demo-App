@@ -1,3 +1,4 @@
+import 'package:cadeau_app/controllers/new_password_contoller.dart';
 import 'package:cadeau_app/screens/verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -48,127 +49,134 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: Center(
-          child: Column(
-            children: [
-              Image.asset(
-                imagePath,
-                width: 100,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Forget password',
-                style: GoogleFonts.jost(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: 200,
-                child: Text(
-                  'Enter phone number to receive code on it',
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Image.asset(
+                  imagePath,
+                  width: 100,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Forget password',
                   style: GoogleFonts.jost(
-                    color: const Color.fromARGB(246, 108, 108, 108),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  textAlign: TextAlign.center,
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700),
                 ),
-              ),
-              const SizedBox(
-                height: 130,
-              ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Phone number',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 125, 125, 125),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    'Enter phone number to receive code on it',
+                    style: GoogleFonts.jost(
+                      color: const Color.fromARGB(246, 108, 108, 108),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              InternationalPhoneNumberInput(
-                onInputChanged: (PhoneNumber number) {
-                  print(number.phoneNumber);
-                  _enteredPhoneNumber = number.phoneNumber!;
-                },
-                inputDecoration: InputDecoration(
-                  hintText: '123-456-7890',
-                  hintStyle: GoogleFonts.jost(
+                const SizedBox(
+                  height: 130,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Phone number',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(255, 125, 125, 125),
+                    ),
+                  ),
+                ),
+                InternationalPhoneNumberInput(
+                  onInputChanged: (PhoneNumber number) {
+                    print(number.phoneNumber);
+                    _enteredPhoneNumber = number.phoneNumber!;
+                  },
+                  inputDecoration: InputDecoration(
+                    hintText: '123-456-7890',
+                    hintStyle: GoogleFonts.jost(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w400, // Semi-bold text
+                        color: Color.fromARGB(
+                            255, 196, 195, 195), // Grey color for hint
+                      ),
+                    ),
+                  ),
+                  textStyle: GoogleFonts.jost(
                     textStyle: const TextStyle(
-                      fontWeight: FontWeight.w400, // Semi-bold text
-                      color: Color.fromARGB(
-                          255, 196, 195, 195), // Grey color for hint
+                      fontWeight: FontWeight.w500, // Semi-bold text
+                      color: Colors.black, // Grey color for hint
                     ),
                   ),
-                ),
-                textStyle: GoogleFonts.jost(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w500, // Semi-bold text
-                    color: Colors.black, // Grey color for hint
+                  textFieldController: _phoneController,
+                  selectorConfig: const SelectorConfig(
+                    selectorType: PhoneInputSelectorType.DROPDOWN,
                   ),
                 ),
-                textFieldController: _phoneController,
-                selectorConfig: const SelectorConfig(
-                  selectorType: PhoneInputSelectorType.DROPDOWN,
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: 370, // Full width
-                height: 60,
-                child: FilledButton(
-                  onPressed: isButtonEnabled
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    VerificationScreen(_enteredPhoneNumber)),
-                          );
-                        }
-                      : null,
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                      (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.disabled)) {
+                SizedBox(
+                  width: 370, // Full width
+                  height: 60,
+                  child: FilledButton(
+                    onPressed: isButtonEnabled
+                        ? () async {
+                             final verificationCode = await NewPasswordController().sendPhoneNumber(_phoneController.text);
+                             print("verification code on forget screen: $verificationCode");
+                             if(!context.mounted){
+                               return;
+                             }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        VerificationScreen(_enteredPhoneNumber,verificationCode)),
+                              );
+                          }
+                        : null,
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.disabled)) {
+                            return const Color.fromARGB(
+                                216, 204, 204, 204); // Disabled color
+                          }
                           return const Color.fromARGB(
-                              216, 204, 204, 204); // Disabled color
-                        }
-                        return const Color.fromARGB(
-                            255, 63, 170, 174); // Enabled color
-                      },
-                    ),
-                    textStyle: WidgetStateProperty.all<TextStyle>(
-                      GoogleFonts.jost(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
+                              255, 63, 170, 174); // Enabled color
+                        },
+                      ),
+                      textStyle: WidgetStateProperty.all<TextStyle>(
+                        GoogleFonts.jost(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
                         ),
                       ),
                     ),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(color: Colors.white),
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

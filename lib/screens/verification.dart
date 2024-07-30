@@ -1,10 +1,13 @@
+import 'package:cadeau_app/controllers/new_password_contoller.dart';
+import 'package:cadeau_app/screens/new_password.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerificationScreen extends StatefulWidget {
-  const VerificationScreen(this.enteredPhone, {super.key});
+  const VerificationScreen(this.enteredPhone,this.verificationCode ,{super.key});
   final String enteredPhone;
+  final String verificationCode;
 
   @override
   State<StatefulWidget> createState() {
@@ -31,7 +34,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   void _onPinCodeChanged() {
     setState(() {
-      isButtonEnabled = _pinCodeController.text.length == 6;
+      isButtonEnabled = _pinCodeController.text.isNotEmpty;
+
     });
   }
 
@@ -99,6 +103,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: PinCodeTextField(
                     appContext: context,
+                    controller: _pinCodeController,
                     length: 6,
                     enableActiveFill: true,
                     pinTheme: PinTheme(
@@ -137,13 +142,31 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   height: 60,
                   child: FilledButton(
                     onPressed: isButtonEnabled
-                        ? () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           VerificationScreen(_enteredPhoneNumber)),
-                            // );
+                        ? () async {
+                              // print('PinCodeControllerText: ${_pinCodeController.text}');
+                              // print('Verification code from verification screen : ${widget.verificationCode}');
+                              if(widget.verificationCode == _pinCodeController.text){
+                                final token = await NewPasswordController().verifyOtp(widget.enteredPhone.substring(3), widget.verificationCode);
+                                print("token : $token");
+                                if(!context.mounted){
+                                  return;
+                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                       NewPasswordScreen(widget.enteredPhone,token)),
+                                );
+                              }
+                              else{
+                                ScaffoldMessenger.of(context).clearSnackBars();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Verification code is incorrect'),
+                                    ));
+                              }
+
+
                           }
                         : null,
                     style: ButtonStyle(
