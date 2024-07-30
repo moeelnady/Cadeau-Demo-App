@@ -79,6 +79,7 @@ flutter:
     - lib/assets/flower_4.png
     - lib/assets/flower_5.png
     - lib/assets/flower_6.png
+    - lib/assets/product-1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
