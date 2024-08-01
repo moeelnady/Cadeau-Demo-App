@@ -17,8 +17,10 @@ class AddToCart extends StatelessWidget{
           Container(
             width: 150,
             height: 70,
+
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black,width: 0.5),
+              border: Border.all(color: Colors.black,width: 1),
+              color: Colors.white
             ),
  // First rectangle color
             child: Center(
