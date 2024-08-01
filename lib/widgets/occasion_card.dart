@@ -1,6 +1,7 @@
+import 'package:cadeau_app/controllers/occasion_controller.dart';
+import 'package:cadeau_app/controllers/products_controller.dart';
 import 'package:cadeau_app/models/occasion.dart';
 import 'package:cadeau_app/screens/occasion_items_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -33,7 +34,7 @@ class OccasionCard extends StatelessWidget {
             Colors.black.withOpacity(0.35),
             BlendMode.multiply,
           ),
-          image: occasionsList[index].image.image,
+          image: Image.network(receivedOccasionsList[index]['banner']).image,
           fit: BoxFit.cover,
         ),
       ),
@@ -48,11 +49,11 @@ class OccasionCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
                   children: [
-                    occasionsList[index].iconImage,
+                    occasionsList[0].iconImage,
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
-                        occasionsList[index].title,
+                        receivedOccasionsList[index]['name'],
                         style: GoogleFonts.jost(
                             color: Colors.white,
                             fontSize: 25,
@@ -73,7 +74,7 @@ class OccasionCard extends StatelessWidget {
                   SizedBox(
                       width: 200,
                       child: Text(
-                        'Nam facilisis risus leo, vitae tempus nisl.',
+                        receivedOccasionsList[index]['description'],
                         style: GoogleFonts.jost(
                             fontWeight: FontWeight.w400, color: Colors.white,fontSize: 20),
                       )),
@@ -82,11 +83,17 @@ class OccasionCard extends StatelessWidget {
                     child: SizedBox(
                       width: 120,
                       child: FilledButton(
-                        onPressed: () {
+                        onPressed: () async{
+                          final productsList = await ProductsController().getProductsById(receivedOccasionsList[index]['id']);
+                          if(!context.mounted){
+                            return ;
+                          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const OccasionItemsScreen()),
+                                builder: (context) {
+                                  return OccasionItemsScreen(productsList);
+                                }),
                           );
                         },
                         style: FilledButton.styleFrom(

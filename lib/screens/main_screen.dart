@@ -1,3 +1,5 @@
+import 'package:cadeau_app/controllers/occasion_controller.dart';
+import 'package:cadeau_app/controllers/products_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +18,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
-
+@override
+  void initState() {
+    OccasionController().getOccasionTypes();
+    // ProductsController().getAllProducts();
+    super.initState();
+  }
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -24,9 +31,6 @@ class _MainScreenState extends State<MainScreen> {
     _pageController.jumpToPage(index);
   }
 
-  Future<http.Response> fetchAlbum() {
-    return http.get(Uri.parse('https://apistaging.cadeau.com.sa/api/v1/admin/lookups/occasion_types/:occasion_type_id'));
-  }
 
   @override
   void dispose() {

@@ -1,4 +1,3 @@
-import 'package:cadeau_app/models/occasion_item.dart';
 import 'package:cadeau_app/widgets/occasion_item_card.dart';
 import 'package:cadeau_app/widgets/sort_filter_by.dart';
 import 'package:cadeau_app/widgets/top_offer.dart';
@@ -6,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OccasionItemsScreen extends StatelessWidget {
-  const OccasionItemsScreen({super.key});
-
+  const OccasionItemsScreen(this.productsList,{super.key});
+  final List<Map<String,dynamic>> productsList;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,9 +57,9 @@ class OccasionItemsScreen extends StatelessWidget {
                           crossAxisSpacing: 4.0,
                           mainAxisSpacing: 4.0,
                           childAspectRatio: 0.7),
-                      itemCount: occasionItems.length,
+                      itemCount: productsList.length,
                       itemBuilder: (ctx, index) {
-                        return OccasionItemCard(index);
+                        return OccasionItemCard(productsList,index);
                       }),
                 ),
               ],

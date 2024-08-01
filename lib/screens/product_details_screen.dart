@@ -1,11 +1,12 @@
+import 'package:cadeau_app/controllers/products_controller.dart';
 import 'package:cadeau_app/widgets/add_to_cart.dart';
 import 'package:cadeau_app/widgets/price.dart';
 import 'package:cadeau_app/widgets/rating_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
-
+  const ProductDetailsScreen(this.product,{super.key});
+  final Map<String,dynamic> product;
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
@@ -13,7 +14,6 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    var imagePath = 'lib/assets/product-1.png';
     return Scaffold(
       body: Stack(
         children: [
@@ -23,11 +23,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                 Column(
                   children: [
-                    Image.asset(
-                      imagePath,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                    Image.network(widget.product['thumbnail'],width: double.infinity,
+                       fit: BoxFit.cover,),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

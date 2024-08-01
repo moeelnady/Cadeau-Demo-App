@@ -1,3 +1,4 @@
+import 'package:cadeau_app/controllers/occasion_controller.dart';
 import 'package:cadeau_app/widgets/occasion_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +35,7 @@ class OccasionScreen extends StatelessWidget {
             ],
           ),
           body: ListView.builder(
-              itemCount: occasionsList.length,
+              itemCount: receivedOccasionsList.length,
               itemBuilder: (context, index) => OccasionCard(index)
           ),
         ),);
