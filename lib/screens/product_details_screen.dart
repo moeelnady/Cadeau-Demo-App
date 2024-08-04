@@ -1,4 +1,3 @@
-import 'package:cadeau_app/controllers/products_controller.dart';
 import 'package:cadeau_app/widgets/add_to_cart.dart';
 import 'package:cadeau_app/widgets/price.dart';
 import 'package:cadeau_app/widgets/rating_widget.dart';
@@ -82,7 +81,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Yellow hoodies for Summer',
+                              widget.product['name'],
                               style: GoogleFonts.jost(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black,

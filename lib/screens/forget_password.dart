@@ -140,7 +140,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        VerificationScreen(_enteredPhoneNumber,verificationCode)),
+                                        VerificationScreen(_phoneController.text,verificationCode)),
                               );
                           }
                         : null,

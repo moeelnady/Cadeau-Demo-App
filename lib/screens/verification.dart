@@ -19,6 +19,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
   var imagePath = 'lib/assets/verify.png';
   bool isButtonEnabled = false;
   final TextEditingController _pinCodeController = TextEditingController();
+  var verificationCode='';
 
   @override
   void initState() {
@@ -90,7 +91,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   height: 30,
                 ),
                 Text(
-                  widget.enteredPhone,
+                  "+20${widget.enteredPhone}",
                   style: GoogleFonts.jost(
                       color: Colors.black,
                       fontSize: 20,
@@ -122,7 +123,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ),
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      verificationCode = await NewPasswordController().sendPhoneNumber(widget.enteredPhone);
+                      print("verification code on resent: $verificationCode");
+                    },
                     child: Text(
                       'Resend code',
                       style: GoogleFonts.jost(
@@ -145,7 +149,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ? () async {
                               // print('PinCodeControllerText: ${_pinCodeController.text}');
                               // print('Verification code from verification screen : ${widget.verificationCode}');
-                              if(widget.verificationCode == _pinCodeController.text){
+                              if((widget.verificationCode == _pinCodeController.text) ||
+                                  (verificationCode== _pinCodeController.text)){
                                 final token = await NewPasswordController().verifyOtp(widget.enteredPhone.substring(3), widget.verificationCode);
                                 print("token : $token");
                                 if(!context.mounted){
