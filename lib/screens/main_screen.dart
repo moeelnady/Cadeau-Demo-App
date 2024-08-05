@@ -1,8 +1,6 @@
 import 'package:cadeau_app/controllers/occasion_controller.dart';
-import 'package:cadeau_app/controllers/products_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'account_screen.dart';
 import 'occasion_screen.dart';
 

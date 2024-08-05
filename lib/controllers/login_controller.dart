@@ -9,7 +9,7 @@ class LoginController {
       "user": {
         "country_code": "20",
         "phone_number": phoneNumber,//120856987
-        "password": password//"Testtest1@"
+        "password": password//"Test111@"
       },
       "device": {
         "device_type": "android", //"android" , "ios" , "web", "unknown"
@@ -34,5 +34,22 @@ class LoginController {
     } else {
       return false;
     }
+  }
+  Future<bool> logout()async{
+    String? token = await CacheHelper.getToken();
+    final response = await http.delete(
+      Uri.parse(
+          'https://apistaging.cadeau.com.sa/api/v1/auth/logout'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print("response ${response.body}");
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+
+
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cadeau_app/controllers/login_controller.dart';
 import 'package:cadeau_app/services/cache_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
 
   void _logout(BuildContext context) async {
+    await LoginController().logout();
     await CacheHelper.removeToken();
     if(!context.mounted){
       return;
