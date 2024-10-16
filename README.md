@@ -29,11 +29,3 @@ Welcome to the Cadeu demo project! This mobile application allows users to buy g
 - **MVC Architecture**: Implemented for better separation of concerns and maintainability.  
 - **Provider**: For state management.  
 
-## Setup Instructions  
-
-To run this project locally, follow these steps:  
-
-1. **Clone the repository**:  
-   ```bash  
-   git clone https://github.com/yourusername/cadeu-demo.git  
-   cd cadeu-demo  
